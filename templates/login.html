@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Oculai (Retinal AI)</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+<style>
+/* ── DARK NEON THEME (Matching Dashboard) ── */
+:root {
+  --bg: #080b14;
+  --bg2: #0d1120;
+  --card: #111624;
+  --border: #1e2540;
+  --accent: #4fc3f7; /* Cyan Blue */
+  --accent2: #7c6af7; /* Purple */
+  --text: #e8eaf6;
+  --muted: #6b7699;
+  --input-bg: rgba(255, 255, 255, 0.03);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: hidden;
+}
+
+/* ── GRID BACKGROUND & GLOW ── */
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0;
+  background-image: 
+    linear-gradient(rgba(79,195,247,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79,195,247,.03) 1px, transparent 1px);
+  background-size: 40px 40px; pointer-events: none;
+}
+.background-glow {
+  position: fixed; inset: 0; z-index: 0;
+  background: 
+    radial-gradient(circle at 15% 15%, rgba(79, 195, 247, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(124, 106, 247, 0.1) 0%, transparent 40%);
+}
+
+.auth-container {
+  position: relative; z-index: 1;
+  width: 100%; max-width: 500px;
+}
+
+/* ── BRANDING ── */
+.header { text-align: center; margin-bottom: 25px; }
+.logo { 
+  font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; 
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  color: white;
+}
+.logo span { color: var(--accent); }
+.tagline { 
+  font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 2px; 
+  margin-top: 5px; text-transform: uppercase; opacity: 0.8;
+}
+
+/* ── AUTH CARD (GLASSMORPHISM) ── */
+.auth-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+  display: flex; flex-direction: column;
+  max-height: 90vh;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+/* ── TABS ── */
+.tabs {
+  display: flex; background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+}
+.tab-btn {
+  flex: 1; padding: 18px; border: none; background: none;
+  color: var(--muted); font-family: 'Syne', sans-serif; 
+  font-weight: 700; font-size: 14px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: 0.3s;
+}
+.tab-btn.active { 
+  color: white; background: var(--card);
+  border-bottom: 2px solid var(--accent);
+}
+.tab-btn .material-symbols-rounded { font-size: 18px; color: var(--accent); }
+
+/* ── SCROLLABLE FORM AREA ── */
+.form-scroller {
+  overflow-y: auto; padding: 30px;
+}
+.form-scroller::-webkit-scrollbar { width: 4px; }
+.form-scroller::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+.auth-form { display: none; }
+.auth-form.active { display: block; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── INPUTS ── */
+.input-group { margin-bottom: 20px; }
+.input-group label {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; color: var(--muted);
+  margin-bottom: 10px; text-transform: uppercase;
+}
+.input-group .material-symbols-rounded { color: var(--accent); font-size: 18px; }
+
+.input-group input {
+  width: 100%; padding: 14px; border-radius: 12px;
+  background: var(--input-bg); border: 1px solid var(--border);
+  color: white; outline: none; transition: 0.3s;
+}
+.input-group input:focus {
+  border-color: var(--accent); box-shadow: 0 0 0 4px rgba(79, 195, 247, 0.1);
+  background: var(--bg2);
+}
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.full { grid-column: span 2; }
+
+/* ── BUTTON ── */
+.btn-submit {
+  width: 100%; padding: 16px; border-radius: 12px; border: none;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: white; font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: 15px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; gap: 12px;
+  transition: 0.3s;
+  box-shadow: 0 10px 20px rgba(124, 106, 247, 0.2);
+}
+.btn-submit:hover { 
+  transform: translateY(-2px); 
+  box-shadow: 0 15px 30px rgba(124, 106, 247, 0.3); 
+  filter: brightness(1.1);
+}
+</style>
+</head>
+<body>
+
+<div class="background-glow"></div>
+
+<div class="auth-container">
+  <div class="header">
+    <div class="logo">👁️ Retinal<span>AI</span></div>
+    <div class="tagline">Neural Ophthalmic Diagnostics</div>
+  </div>
+
+  <div class="auth-card">
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">
+        <span class="material-symbols-rounded">login</span> LOGIN
+      </button>
+      <button class="tab-btn" id="tab-register" onclick="switchTab('register')">
+        <span class="material-symbols-rounded">person_add</span> REGISTER
+      </button>
+    </div>
+
+    <div class="form-scroller">
+      <form id="login-form" class="auth-form active">
+        <div class="input-group">
+          <label><span class="material-symbols-rounded">account_circle</span> Username</label>
+          <input type="text" id="log-user" placeholder="Enter your username" required>
+        </div>
+        <div class="input-group">
+          <label><span class="material-symbols-rounded">lock</span> Password</label>
+          <input type="password" id="log-pass" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-submit">
+          ACCESS DASHBOARD <span class="material-symbols-rounded">arrow_forward</span>
+        </button>
+      </form>
+
+      <form id="register-form" class="auth-form">
+        <div class="grid-2">
+          <div class="input-group full">
+            <label><span class="material-symbols-rounded">badge</span> Full Name</label>
+            <input type="text" id="reg-name" placeholder="Enter full name" required>
+          </div>
+          <div class="input-group">
+            <label><span class="material-symbols-rounded">event</span> Age</label>
+            <input type="number" id="reg-age" placeholder="Age" required>
+          </div>
+          <div class="input-group">
+            <label><span class="material-symbols-rounded">wc</span> Gender</label>
+            <input type="text" id="reg-gender" placeholder="Gender" required>
+          </div>
+          <div class="input-group full">
+            <label><span class="material-symbols-rounded">mail</span> Email Address</label>
+            <input type="email" id="reg-email" placeholder="mail@example.com" required>
+          </div>
+          <div class="input-group full">
+            <label><span class="material-symbols-rounded">home</span> Address</label>
+            <input type="text" id="reg-address" placeholder="Residential address" required>
+          </div>
+          <div class="input-group full">
+            <label><span class="material-symbols-rounded">call</span> Contact Number</label>
+            <input type="text" id="reg-phone" placeholder="Phone number" required>
+          </div>
+          <div class="input-group">
+            <label><span class="material-symbols-rounded">person</span> Username</label>
+            <input type="text" id="reg-user" required>
+          </div>
+          <div class="input-group">
+            <label><span class="material-symbols-rounded">key</span> Password</label>
+            <input type="password" id="reg-pass" required>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit">
+          CREATE ACCOUNT <span class="material-symbols-rounded">verified_user</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function switchTab(type) {
+    document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(type + '-form').classList.add('active');
+    document.getElementById('tab-' + type).classList.add('active');
+  }
+
+  // Register Logic
+  document.getElementById('register-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const userData = {
+      name: document.getElementById('reg-name').value,
+      user: document.getElementById('reg-user').value.trim(),
+      pass: document.getElementById('reg-pass').value.trim(),
+      age: document.getElementById('reg-age').value,
+      gender: document.getElementById('reg-gender').value,
+      email: document.getElementById('reg-email').value,
+      address: document.getElementById('reg-address').value,
+      phone: document.getElementById('reg-phone').value
+    };
+    localStorage.setItem('patient_data', JSON.stringify(userData));
+    alert("Successfully Registered! Please login to continue.");
+    switchTab('login');
+  });
+
+  // Login Logic
+  document.getElementById('login-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const u = document.getElementById('log-user').value.trim();
+    const p = document.getElementById('log-pass').value.trim();
+    const stored = JSON.parse(localStorage.getItem('patient_data'));
+
+    if(stored && u === stored.user && p === stored.pass) {
+      window.location.href = '/dashboard';
+    } else {
+      alert("Invalid Credentials! Please register first.");
+    }
+  });
+</script>
+</body>
+</html>

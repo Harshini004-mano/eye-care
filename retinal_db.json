@@ -1,0 +1,13 @@
+{
+    "users": [
+        {
+            "id": "u_demo",
+            "name": "Dr. Demo",
+            "email": "demo@retinal.ai",
+            "password": "demo123",
+            "createdAt": "2026-04-07T17:37:59.350088"
+        }
+    ],
+    "history": [],
+    "sessions": []
+}
